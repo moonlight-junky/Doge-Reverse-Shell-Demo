@@ -2,7 +2,7 @@
 Reverse Shell Demo
 
 ```
-rshell_stcp.go 来自云舒大佬微博
+rshell_stcp.go 来自某大佬微博
 ```
 
 仅为记录学习作用
